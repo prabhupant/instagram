@@ -22,16 +22,36 @@ export default function SingUp() {
 
         const usernameExists = await doesUsernameExist(username);
 
-        if (usernameExists) {
+        if (!usernameExists.length) {
             try {
                 const createdUserResult = await firebase
                     .auth()
-                    .createUserWithEmailAndPassword(emailAddress, password)
-            } catch (error) {
-                
-            }
-        }
+                    .createUserWithEmailAndPassword(emailAddress, password);
 
+                await createdUserResult.user.updateProfile({
+                    displayName: username
+                })
+                
+                await firebase.firestore().collection('users').add({
+                    userId: createdUserResult.user.uid,
+                    username: username.toLowerCase(),
+                    fullName,
+                    emailAddress: emailAddress.toLowerCase(),
+                    following: [],
+                    dateCreated: Date.now()
+                })
+                
+                history.push(ROUTES.DASHBOARD);
+
+            } catch (error) {
+                setFullName('');
+                setEmailAddress('');
+                setPassword('');
+                setError(error.message);
+            }
+        } else {
+            setError('That username is already taken. Please try another.')
+        }
     };
 
     useEffect(() => {
