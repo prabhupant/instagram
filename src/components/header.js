@@ -23,7 +23,7 @@ export default function Header() {
                         {
                             user ? (
                                 <>
-                                    <Link to={ROUTES.DASHBOARD} aria-labe="DASHBOARD">
+                                    <Link to={ROUTES.DASHBOARD} aria-label="DASHBOARD">
                                         <svg
                                             className="w-8 mr-6 text-black-light cursor-pointer"
                                             xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ export default function Header() {
                                         <Link to={`/p/${user.displayName}`}>
                                             <img
                                                 className="rounded-full h-8 w-8 flex"
-                                                src={`/images/avatars/karl.jpg`}
+                                                src={`/images/avatars/${user.displayName}.jpg`}
                                                 alt={`${user.displayName} profile picture`}
                                             />
                                         </Link>
