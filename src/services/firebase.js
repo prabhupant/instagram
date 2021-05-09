@@ -1,3 +1,4 @@
+import { findByPlaceholderText } from '@testing-library/dom';
 import { firebase, FieldValue } from '../lib/firebase';
 
 export async function doesUsernameExist(username) { 
@@ -24,4 +25,18 @@ export async function getUserByUserId(userId) {
     }));
 
     return user;
+}
+
+
+export async function getSuggestedProfiles(userId, following) {
+    const result = await firebase
+        .firestore()
+        .collection('users')
+        .limit(10)
+        .get();
+    
+    console.log('result - ', result);
+    return result.docs
+        .map((user) => ({ ...user.data(), docId: user.id}))
+        .filter((profile) => profile.userId !== userId && !following.includes(profile.userId));
 }
